@@ -16,15 +16,16 @@ type Usecase struct {
 	config cmdargs.RunArgs
 }
 
-func NewUsecase(repo Repo) *Usecase {
+func NewUsecase(repo Repo, config cmdargs.RunArgs) *Usecase {
 	return &Usecase{
-		repo: repo,
+		repo:   repo,
+		config: config,
 	}
 }
 
 func (u *Usecase) Shorten(url string) (string, error) {
 	hash := sha256.Sum256([]byte(url))
-	hashString := hex.EncodeToString(hash[:])
+	hashString := hex.EncodeToString(hash[:])[:8]
 	err := u.repo.SaveURL(url, hashString)
 	if err != nil {
 		return "", err

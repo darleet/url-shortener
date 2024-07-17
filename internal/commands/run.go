@@ -36,7 +36,7 @@ func InitRunCommand() (*cobra.Command, error) {
 				"args", cmdArgs,
 			)
 
-			entrypoint := app.NewEntrypoint(repository.NewRepository())
+			entrypoint := app.NewEntrypoint(repository.NewRepository(), cmdArgs)
 
 			err = entrypoint.Run()
 			if err != nil {
