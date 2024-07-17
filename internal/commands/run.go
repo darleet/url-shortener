@@ -3,8 +3,10 @@ package commands
 import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"shortener/internal/app"
 	"shortener/internal/commands/cmdargs"
 	"shortener/internal/depgraph"
+	"shortener/internal/repository"
 )
 
 func InitRunCommand() (*cobra.Command, error) {
@@ -32,6 +34,13 @@ func InitRunCommand() (*cobra.Command, error) {
 				"Got config",
 				"args", cmdArgs,
 			)
+
+			entrypoint := app.NewEntrypoint(repository.NewRepository())
+
+			err = entrypoint.Run()
+			if err != nil {
+				return err
+			}
 
 			return nil
 		},
