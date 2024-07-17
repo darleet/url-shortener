@@ -9,6 +9,6 @@ func InitRouter(usecase handlers.UsecaseURL) *echo.Echo {
 	e := echo.New()
 	m := handlers.NewManager(usecase)
 	e.POST("/shorten", m.Shorten)
-	e.POST("/expand", m.Expand)
+	e.GET("/:url", m.Expand)
 	return e
 }

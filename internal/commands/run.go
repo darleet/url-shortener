@@ -16,6 +16,7 @@ func InitRunCommand() (*cobra.Command, error) {
 		Short: "Starts server",
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			viper.AddConfigPath(".")
+			viper.SetConfigName("local")
 			viper.SetConfigType("env")
 
 			err := viper.ReadInConfig()

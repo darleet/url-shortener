@@ -2,6 +2,7 @@ package url
 
 import (
 	"crypto/sha256"
+	"encoding/hex"
 	"shortener/internal/commands/cmdargs"
 )
 
@@ -22,12 +23,13 @@ func NewUsecase(repo Repo) *Usecase {
 }
 
 func (u *Usecase) Shorten(url string) (string, error) {
-	shortURL := sha256.Sum256([]byte(url))
-	err := u.repo.SaveURL(url, string(shortURL[]))
+	hash := sha256.Sum256([]byte(url))
+	hashString := hex.EncodeToString(hash[:])
+	err := u.repo.SaveURL(url, hashString)
 	if err != nil {
 		return "", err
 	}
-	return u.config.ShortenerURL + string(shortURL[:]), nil
+	return u.config.ShortenerURL + hashString, nil
 }
 
 func (u *Usecase) Expand(url string) (string, error) {

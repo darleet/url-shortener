@@ -6,27 +6,24 @@ import (
 )
 
 type Repository struct {
-	mu   sync.RWMutex
-	urls map[string]string
+	urls sync.Map
 }
 
 func NewRepository() *Repository {
-	return &Repository{}
+	return &Repository{
+		urls: sync.Map{},
+	}
 }
 
 func (r *Repository) SaveURL(url, hash string) error {
-	r.mu.Lock()
-	defer r.mu.Unlock()
-	r.urls[hash] = url
+	r.urls.Store(hash, url)
 	return nil
 }
 
 func (r *Repository) GetURL(hash string) (string, error) {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-	url, ok := r.urls[hash]
+	url, ok := r.urls.Load(hash)
 	if !ok {
 		return "", errors.New("url not found")
 	}
-	return url, nil
+	return url.(string), nil
 }
